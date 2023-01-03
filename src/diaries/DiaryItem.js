@@ -15,8 +15,15 @@ import EditLocationAltIcon from "@mui/icons-material/EditLocationAlt";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import React from "react";
+import { Link } from "react-router-dom";
+const DiaryItem = ({ title, description, image, location, date, id, user }) => {
+  const isLoggedInUser = () => {
+    if (localStorage.getItem("userId") === user) {
+      return true;
+    }
+    return false;
+  };
 
-const DiaryItem = ({title,description,image,location,date,id}) => {
   return (
     <Card
       sx={{
@@ -45,11 +52,7 @@ const DiaryItem = ({title,description,image,location,date,id}) => {
         header={location}
         subheader={date}
       />
-      <img
-        height="194"
-        src={image}
-        alt={title}
-      />
+      <img height="194" src={image} alt={title} />
       <CardContent>
         <Typography paddingBottom={1} variant="h6" color="text.secondary">
           {title}
@@ -60,18 +63,20 @@ const DiaryItem = ({title,description,image,location,date,id}) => {
             Aman Patel:
           </Typography>
           <Typography variant="body2" color="text.secondary">
-          {description}
+            {description}
           </Typography>
         </Box>
       </CardContent>
-      <CardActions sx={{ marginLeft: "auto" }}>
-        <IconButton color="warning">
-          <ModeEditOutlineIcon />
-        </IconButton>
-        <IconButton color="error">
-          <DeleteForeverIcon />
-        </IconButton>
-      </CardActions>
+      {isLoggedInUser() && (
+        <CardActions sx={{ marginLeft: "auto" }}>
+          <IconButton LinkComponent={Link} to={`/post/${id}`} color="warning">
+            <ModeEditOutlineIcon />
+          </IconButton>
+          <IconButton color="error">
+            <DeleteForeverIcon />
+          </IconButton>
+        </CardActions>
+      )}
     </Card>
   );
 };
