@@ -123,25 +123,38 @@ export const updatePost = async (req, res) => {
   return res.status(200).json({ message: "updated successfully" });
 };
 
+// export const deletePost = async (req, res) => {
+//   const id = req.params.id;
+//   let post;
+//   try {
+//     const session = await mongoose.startSession();
+//     session.startTransaction();
+
+//     post = await Post.findById(id).populate("user");
+//     post.user.posts.pull(post);
+//     await post.user.save({ session });
+
+//     post = await Post.findByIdAndRemove(id);
+
+//     session.commitTransaction();
+//   } catch (err) {
+//     return console.log(err);
+//   }
+//   if (!post) {
+//     return res.status(500).json({ message: "unable to delete" });
+//   }
+//   return res.status(200).json({ message: "Deleted Successfully" });
+// };
+
 export const deletePost = async (req, res) => {
-  const id = req.params.id;
-  let post;
   try {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
-    post = await Post.findById(id).populate("user");
-    post.user.posts.pull(post);
-    await post.user.save({ session });
-
-    post = await Post.findByIdAndRemove(id);
-
-    session.commitTransaction();
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ message: "User does not exist" });
+    }
+    await await Post.findByIdAndRemove(id);
+    return res.status(200).json({ message: "Deleted successfully" });
   } catch (err) {
-    return console.log(err);
+    return res.status(404).json({ message: "Unable to delete" });
   }
-  if (!post) {
-    return res.status(500).json({ message: "unable to delete" });
-  }
-  return res.status(200).json({ message: "Deleted Successfully" });
 };

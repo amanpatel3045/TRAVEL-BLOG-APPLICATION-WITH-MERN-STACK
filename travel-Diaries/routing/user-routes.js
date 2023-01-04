@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { getAllUsers, login, signup } from "../controllers/user-controllers";
+import { getAllUsers, getUserById, login, signup } from "../controllers/user-controllers";
 
 
 
 const userRouter=Router();
 
 userRouter.get("/",getAllUsers);
+
+userRouter.get("/:id",getUserById);
 
 userRouter.post("/signup",signup);
 
