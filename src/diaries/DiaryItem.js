@@ -10,20 +10,29 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
-
+import { Snackbar, Alert } from "@mui/material";
 import EditLocationAltIcon from "@mui/icons-material/EditLocationAlt";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import React from "react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { postDelete } from "../api-helpers/helpers";
+
 const DiaryItem = ({ title, description, image, location, date, id, user }) => {
+  const [open, setOpen] = useState(false);
   const isLoggedInUser = () => {
     if (localStorage.getItem("userId") === user) {
       return true;
     }
     return false;
   };
-
+  const handleDelete = () => {
+    postDelete(id)
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+    setOpen(true);
+  };
   return (
     <Card
       sx={{
@@ -72,11 +81,24 @@ const DiaryItem = ({ title, description, image, location, date, id, user }) => {
           <IconButton LinkComponent={Link} to={`/post/${id}`} color="warning">
             <ModeEditOutlineIcon />
           </IconButton>
-          <IconButton color="error">
+          <IconButton onClick={handleDelete} color="error">
             <DeleteForeverIcon />
           </IconButton>
         </CardActions>
       )}
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={() => setOpen(false)}
+      >
+        <Alert
+          onClose={() => setOpen(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          This is a success message!
+        </Alert>
+      </Snackbar>
     </Card>
   );
 };
