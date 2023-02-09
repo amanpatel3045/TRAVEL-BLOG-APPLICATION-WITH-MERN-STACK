@@ -3,7 +3,7 @@ import { getAllUsers, getUserById, login, signup } from "../controllers/user-con
 
 
 
-const userRouter=Router();
+export const userRouter=Router();
 
 userRouter.get("/",getAllUsers);
 
@@ -13,4 +13,4 @@ userRouter.post("/signup",signup);
 
 userRouter.post("/login",login);
 
-export default userRouter;
+// exports  userRouter;
