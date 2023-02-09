@@ -2,15 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
 import DiaryItem from "./DiaryItem";
 import { getAllPosts } from "../api-helpers/helpers";
+import Loader from "../Loader";
+
 const Diaries = () => {
   const [posts, setPosts] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    setIsLoading(true);
     getAllPosts()
-      .then((data) => setPosts(data?.posts))
+      .then((data) => setPosts(data?.posts.reverse()))
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
+
+  if (isLoading) {
+    return <Loader open={isLoading } setOpen={setIsLoading}/>;
+  }
+
   return (
     <Box
       display="flex"
@@ -31,7 +41,6 @@ const Diaries = () => {
             title={item.title}
             key={index}
             user={item.user}
-          
           />
         ))}
     </Box>

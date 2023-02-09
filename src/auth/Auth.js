@@ -4,32 +4,40 @@ import { sendAuthRequest } from "../api-helpers/helpers";
 import { useDispatch } from "react-redux";
 import { authActions } from "../store";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Loader";
 const Auth = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isLoad, setIsLoad] = useState(false);
   const [isSignup, setIsSignup] = useState(true);
+
   const onResReceived = (data) => {
     if (isSignup) {
       localStorage.setItem("userId", data.user._id);
     } else {
       localStorage.setItem("userId", data.id);
+      console.log(data.id);
     }
 
     dispatch(authActions.login());
     navigate("/diaries");
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoad(true);
     console.log(inputs);
-
+    // setIsSignup(true);
     if (isSignup) {
       sendAuthRequest(true, inputs)
         .then(onResReceived)
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => setIsLoad(false));
     } else {
       sendAuthRequest(false, inputs)
         .then(onResReceived)
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => setIsLoad(false));
     }
   };
 
@@ -40,6 +48,11 @@ const Auth = () => {
       [e.target.name]: e.target.value,
     }));
   };
+
+  if (isLoad) {
+    return <Loader open={isLoad} setOpen={setIsLoad} />;
+  }
+
   return (
     <Box
       width="40%"

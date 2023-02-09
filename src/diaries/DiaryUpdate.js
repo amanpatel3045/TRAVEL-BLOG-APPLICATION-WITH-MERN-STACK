@@ -4,7 +4,11 @@ import { getPostDetails, postUpdate } from "../api-helpers/helpers";
 import { Box, Typography, TextField, FormLabel, Button } from "@mui/material";
 import { addPost } from "../api-helpers/helpers";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
+import Loader from "../Loader";
+import { useNavigate } from "react-router-dom";
 function DiaryUpdate() {
+  const navigate = useNavigate();
+  const [isLoad, setIsLoad] = useState(false);
   const [post, setPost] = useState();
   const [inputs, setInputs] = useState({
     title: "",
@@ -29,18 +33,27 @@ function DiaryUpdate() {
   }, [id]);
 
   const handleChange = (e) => {
+    
     setInputs((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
   };
   const handleSubmit = (e) => {
+    setIsLoad(true);
+    navigate("/diaries");
     e.preventDefault();
     console.log(inputs);
     postUpdate(inputs, id)
       .then((data) => console.log(data))
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoad(false));
   };
+
+  if (isLoad) {
+    return <Loader open={isLoad} setOpen={setIsLoad} />;
+  }
+
   return (
     <Box display="flex" flexDirection={"column"} width="100%" height="100%">
       <Box display="flex" margin="auto" padding={2}>

@@ -1,5 +1,8 @@
 import axios from "axios";
+
+
 export const getAllPosts = async () => {
+ 
   const res = await axios.get("/posts");
   if (res.status !== 200) {
     return console.log("some error occurred");
@@ -57,6 +60,7 @@ export const getPostDetails = async (id) => {
 };
 
 export const postUpdate = async (data, id) => {
+ 
   const res = await axios
     .put(`/posts/${id}`, {
       title: data.title,
@@ -64,7 +68,9 @@ export const postUpdate = async (data, id) => {
       location: data.location,
       image: data.imageUrl,
     })
-    .catch((err) => console.log(err));
+   
+    .catch((err) => console.log(err))
+    
 
   if (res.status !== 200) {
     return console.log("Unable to Update");
@@ -88,12 +94,12 @@ export const postDelete = async (id) => {
 };
 export const getUserDetails = async () => {
   const id = localStorage.getItem("userId");
-  const res = await axios.get(`/user/${id}`).catch((err) => console.log(err));
+  const res = await axios.get(`/user/${id}`).catch((err) => console.log( err));
 
   if(res.status!==200){
     return console.log("No user found");
   }
 
-  const resData=await res.data;
+  const resData = await res.data;
   return resData;
 };

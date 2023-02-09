@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import { addPost } from "../api-helpers/helpers";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Loader";
 const Add = () => {
   const navigate = useNavigate();
+  const [isLoad, setIsLoad] = useState(false);
   const [inputs, setInputs] = useState({
     title: "",
     description: "",
@@ -24,12 +26,30 @@ const Add = () => {
     navigate("/diaries");
   };
   const handleSubmit = (e) => {
+    if (
+     inputs.title == "" ||
+     inputs.description == "" ||
+     inputs.location == "" ||
+     inputs.imageUrl == "" ||
+     inputs.date == ""
+    ){
+    
+      alert("Please Fill The All Details");
+      navigate("/");
+    }
+      setIsLoad(true);
     e.preventDefault();
     console.log(inputs);
     addPost(inputs)
       .then(onResReceived)
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoad(false));
   };
+
+  if (isLoad) {
+    return <Loader open={isLoad} setOpen={setIsLoad} />;
+  }
+
   return (
     <Box display="flex" flexDirection={"column"} width="100%" height="100%">
       <Box display="flex" margin="auto" padding={2}>

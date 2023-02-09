@@ -19,17 +19,9 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { postDelete } from "../api-helpers/helpers";
 
-const DiaryItem = ({
-  title,
-  description,
-  image,
-  location,
-  date,
-  id,
-  user,
-
-}) => {
+const DiaryItem = ({ title, description, image, location, date, id, user }) => {
   const [open, setOpen] = useState(false);
+
   const isLoggedInUser = () => {
     if (localStorage.getItem("userId") === user) {
       return true;
@@ -42,6 +34,7 @@ const DiaryItem = ({
       .catch((err) => console.log(err));
     setOpen(true);
   };
+
   return (
     <Card
       sx={{
@@ -55,11 +48,7 @@ const DiaryItem = ({
       }}
     >
       <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-             
-          </Avatar>
-        }
+        avatar={<Avatar sx={{ bgcolor: "red" }} aria-label="recipe"></Avatar>}
         action={
           <IconButton aria-label="settings">
             {/* <MoreVertIcon /> */}
@@ -110,7 +99,7 @@ const DiaryItem = ({
           severity="success"
           sx={{ width: "100%" }}
         >
-          This is a success message!
+          Post deleted successfully
         </Alert>
       </Snackbar>
     </Card>

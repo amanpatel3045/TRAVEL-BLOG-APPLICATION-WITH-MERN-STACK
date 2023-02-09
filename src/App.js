@@ -15,9 +15,9 @@ function App() {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   console.log(isLoggedIn);
 
-  useEffect(()=>{
-    dispatch(authActions.login());
-  },[localStorage])
+  // useEffect(()=>{
+  //   dispatch(authActions.login());
+  // },[localStorage])
   return (
     <div>
       <header>
